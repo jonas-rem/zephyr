@@ -1,0 +1,40 @@
+/*
+ * Copyright (c) 2019 Phytec Messtechnik GmbH
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+&arduino_spi {
+	status = "okay";
+	cs-gpios = <&arduino_header 16 GPIO_ACTIVE_LOW>;		/* D10 */
+
+	can0: mcp2517fd@0 {
+		compatible = "microchip,mcp25xxfd";
+		spi-max-frequency = <16000000>;
+		int-gpios = <&arduino_header 15 GPIO_ACTIVE_LOW>;	/* D9 */
+		status = "okay";
+		label = "CAN_0";
+		reg = <0>;
+	    bus-speed = <1000000>;
+	    bus-speed-data = <8000000>;
+		osc-freq = <20000000>;
+		sof-on-clko;
+		sjw = <5>;
+		sjw-data = <1>;
+		prop-seg = <18>;
+		prop-seg-data = <0>;
+		// Commenting those settings creates Kernel Panic
+		//phase-seg1 = <10>;
+		//phase-seg2 = <11>;
+		//phase-seg1-data = <3>;
+		//phase-seg2-data = <1>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+	};
+};
+
+/ {
+	chosen {
+		zephyr,can-primary = &can0;
+	};
+};

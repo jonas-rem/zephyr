@@ -1,0 +1,16 @@
+# Copyright (c) 2021 Phytec Messtechnik GmbH
+# SPDX-License-Identifier: Apache-2.0
+
+if SHIELD_LINK_BOARD_CAN
+
+if CAN
+
+config SPI
+	default y
+
+config CAN_MCP25XXFD
+	default y
+
+endif # CAN
+
+endif # SHIELD_LINK_BOARD_CAN
