@@ -6,6 +6,7 @@
  */
 #include "reel_board-pinctrl.dtsi"
 #include <zephyr/dt-bindings/input/input-event-codes.h>
+#include <zephyr/dt-bindings/sensor/lps2xdf.h>
 
 / {
 	chosen {
@@ -91,6 +92,8 @@
 		blue-pwm-led = &blue_pwm_led;
 		sw0 = &user_button;
 		accel0 = &mma8642fc;
+		press0 = &lps28dfw;
+		press1 = &lps22df;
 	};
 };
 
@@ -152,6 +155,21 @@ arduino_i2c: &i2c0 {
 		compatible = "avago,apds9960";
 		reg = <0x39>;
 		int-gpios = <&gpio0 23 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+	};
+
+	lps28dfw: lps28dfw@5c {
+		compatible = "st,lps28dfw";
+		reg = <0x5c>;
+		drdy-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+		odr = <LPS2xDF_DT_ODR_10HZ>;
+		fs = <LPS28DFW_DT_FS_MODE_2_4060>;
+	};
+
+	lps22df: lps22df@5d {
+		compatible = "st,lps22df";
+		reg = <0x5d>;
+		drdy-gpios = <&gpio1 14 GPIO_ACTIVE_HIGH>;
+		odr = <LPS2xDF_DT_ODR_10HZ>;
 	};
 };
 
