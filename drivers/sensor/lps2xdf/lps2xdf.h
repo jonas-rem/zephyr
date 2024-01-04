@@ -31,19 +31,17 @@
 
 #define LPS2XDF_SWRESET_WAIT_TIME_US 50
 
-#if (DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps22df, i3c) || \
-	DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps28dfw, i3c))
-	#define ON_I3C_BUS(cfg) (cfg->i3c.bus != NULL)
+#if (DT_COMPAT_ON_BUS_INTERNAL(st_lps22df, i3c) || DT_COMPAT_ON_BUS_INTERNAL(st_lps28dfw, i3c))
+#define ON_I3C_BUS(cfg) (cfg->i3c.bus != NULL)
 #else
-	#define ON_I3C_BUS(cfg) (false)
+#define ON_I3C_BUS(cfg) (false)
 #endif
 
 typedef int32_t (*api_lps2xdf_mode_set_odr_raw)(const struct device *dev, uint8_t odr);
 typedef int32_t (*api_lps2xdf_sample_fetch)(const struct device *dev, enum sensor_channel chan);
 typedef void (*api_lps2xdf_handle_interrupt)(const struct device *dev);
 #ifdef CONFIG_LPS2XDF_TRIGGER
-typedef int (*api_lps2xdf_trigger_set)(const struct device *dev,
-				       const struct sensor_trigger *trig,
+typedef int (*api_lps2xdf_trigger_set)(const struct device *dev, const struct sensor_trigger *trig,
 				       sensor_trigger_handler_t handler);
 #endif
 
@@ -56,25 +54,21 @@ struct lps2xdf_chip_api {
 #endif
 };
 
-
 enum sensor_variant {
 	DEVICE_VARIANT_LPS22DF = 0,
 	DEVICE_VARIANT_LPS28DFW = 1,
 };
 
-
 struct lps2xdf_config {
 	stmdev_ctx_t ctx;
 	union {
-#if (DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps22df, i2c) || \
-	DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps28dfw, i2c))
+#if (DT_COMPAT_ON_BUS_INTERNAL(st_lps22df, i2c) || DT_COMPAT_ON_BUS_INTERNAL(st_lps28dfw, i2c))
 		const struct i2c_dt_spec i2c;
 #endif
-#if DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps22df, spi)
+#if DT_COMPAT_ON_BUS_INTERNAL(st_lps22df, spi)
 		const struct spi_dt_spec spi;
 #endif
-#if (DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps22df, i3c) || \
-	DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps28dfw, i3c))
+#if (DT_COMPAT_ON_BUS_INTERNAL(st_lps22df, i3c) || DT_COMPAT_ON_BUS_INTERNAL(st_lps28dfw, i3c))
 		struct i3c_device_desc **i3c;
 #endif
 	} stmemsc_cfg;
@@ -88,8 +82,7 @@ struct lps2xdf_config {
 	bool trig_enabled;
 #endif
 
-#if (DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps22df, i3c) || \
-	DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps28dfw, i3c))
+#if (DT_COMPAT_ON_BUS_INTERNAL(st_lps22df, i3c) || DT_COMPAT_ON_BUS_INTERNAL(st_lps28dfw, i3c))
 	struct {
 		const struct device *bus;
 		const struct i3c_device_id dev_id;
@@ -119,15 +112,13 @@ struct lps2xdf_data {
 
 #endif /* CONFIG_LPS2XDF_TRIGGER */
 
-#if (DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps22df, i3c) || \
-	DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps28dfw, i3c))
+#if (DT_COMPAT_ON_BUS_INTERNAL(st_lps22df, i3c) || DT_COMPAT_ON_BUS_INTERNAL(st_lps28dfw, i3c))
 	struct i3c_device_desc *i3c_dev;
 #endif
 };
 
 #ifdef CONFIG_LPS2XDF_TRIGGER
-int lps2xdf_trigger_set(const struct device *dev,
-			const struct sensor_trigger *trig,
+int lps2xdf_trigger_set(const struct device *dev, const struct sensor_trigger *trig,
 			sensor_trigger_handler_t handler);
 
 int lps2xdf_init_interrupt(const struct device *dev, enum sensor_variant variant);

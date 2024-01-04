@@ -159,7 +159,7 @@ int st_lps28dfw_init(const struct device *dev)
 	uint8_t tries = 10;
 	int ret;
 
-#if DT_HAS_COMPAT_ON_BUS_STATUS_OKAY(st_lps28dfw, i3c)
+#if DT_COMPAT_ON_BUS_INTERNAL(st_lps28dfw, i3c)
 	if (cfg->i3c.bus != NULL) {
 		struct lps2xdf_data *data = dev->data;
 		/*
