@@ -9,6 +9,7 @@
 #include <st/l4/stm32l496z(e-g)tx-pinctrl.dtsi>
 #include "arduino_r3_connector.dtsi"
 #include <zephyr/dt-bindings/input/input-event-codes.h>
+#include <zephyr/dt-bindings/sensor/tmag5273.h>
 
 / {
 	model = "STMicroelectronics STM32L496ZG-NUCLEO board";
@@ -24,11 +25,11 @@
 	leds: leds {
 		compatible = "gpio-leds";
 		green_led_1: led_1 {
-			gpios = <&gpioc 7 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpioc 0 GPIO_ACTIVE_HIGH>;
 			label = "User LD1";
 		};
 		blue_led_2: led_2 {
-			gpios = <&gpiob 7 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpioa 3 GPIO_ACTIVE_HIGH>;
 			label = "User LD2";
 		};
 		red_led_3: led_3 {
@@ -52,6 +53,16 @@
 			gpios = <&gpioc 13 GPIO_ACTIVE_HIGH>;
 			zephyr,code = <INPUT_KEY_0>;
 		};
+	};
+
+	step: step {
+		compatible = "power-switch";
+		gpios = <&gpioc 0 GPIO_ACTIVE_HIGH>;
+	};
+
+	direction: direction{
+		compatible = "power-switch";
+		gpios = <&gpioa 3 GPIO_ACTIVE_HIGH>;
 	};
 
 	aliases {
@@ -155,11 +166,21 @@ zephyr_udc0: &usbotg_fs {
 	};
 };
 
-&i2c1 {
-	pinctrl-0 = <&i2c1_scl_pb8 &i2c1_sda_pb9>;
+&i2c2 {
+	pinctrl-0 = <&i2c2_scl_pf1 &i2c2_sda_pf0>;
 	pinctrl-names = "default";
 	status = "okay";
 	clock-frequency = <I2C_BITRATE_FAST>;
+
+	tmag5273: tmag5273@22 {
+		compatible = "ti,tmag5273";
+		status = "okay";
+		reg = <0x22>;
+		//int-gpios = <&test_gpio 15 1>;
+
+		operation-mode = <TMAG5273_DT_OPER_MODE_CONTINUOUS>;
+		angle-magnitude-axis = <TMAG5273_DT_ANGLE_MAG_XY>;
+	};
 };
 
 &spi1 {
