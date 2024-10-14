@@ -127,6 +127,8 @@ Boards & SoC Support
 
 * Added support for these boards:
 
+  * Added support for PHYTEC phyBOARD-Nash i.MX93.
+
 * Made these board changes:
 
   * :ref:`native_posix<native_posix>` has been deprecated in favour of
